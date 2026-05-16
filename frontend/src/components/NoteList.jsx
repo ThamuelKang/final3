@@ -2,7 +2,11 @@ function NoteList({ notes, onEdit, onDelete }) {
   if (notes.length === 0) {
     return (
       <div className="empty-state">
+        <div className="empty-duck">🦆</div>
         <p>No notes yet. Create your first note!</p>
+        <p style={{ fontSize: "0.85rem", marginTop: "0.5rem" }}>
+          This duck is lonely without your thoughts...
+        </p>
       </div>
     );
   }
@@ -13,7 +17,11 @@ function NoteList({ notes, onEdit, onDelete }) {
         <div key={note.id} className="note-card">
           <div className="note-content" onClick={() => onEdit(note)}>
             <h3>{note.title}</h3>
-            <p>{note.content.length > 150 ? note.content.slice(0, 150) + "..." : note.content}</p>
+            <p>
+              {note.content.length > 150
+                ? note.content.slice(0, 150) + "..."
+                : note.content}
+            </p>
             <span className="note-date">
               {new Date(note.updated_at).toLocaleDateString()}
             </span>

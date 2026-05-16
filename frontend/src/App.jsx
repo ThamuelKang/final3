@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -7,6 +7,12 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleLogin = (newToken) => {
     localStorage.setItem("token", newToken);
@@ -24,20 +30,33 @@ function App() {
         <Route
           path="/login"
           element={
-            token ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+            token ? (
+              <Navigate to="/" />
+            ) : (
+              <Login onLogin={handleLogin} theme={theme} setTheme={setTheme} />
+            )
           }
         />
         <Route
           path="/signup"
           element={
-            token ? <Navigate to="/" /> : <Signup onLogin={handleLogin} />
+            token ? (
+              <Navigate to="/" />
+            ) : (
+              <Signup onLogin={handleLogin} theme={theme} setTheme={setTheme} />
+            )
           }
         />
         <Route
           path="/"
           element={
             <ProtectedRoute token={token}>
-              <Dashboard token={token} onLogout={handleLogout} />
+              <Dashboard
+                token={token}
+                onLogout={handleLogout}
+                theme={theme}
+                setTheme={setTheme}
+              />
             </ProtectedRoute>
           }
         />

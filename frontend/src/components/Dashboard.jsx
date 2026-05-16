@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { API_URL } from "../config";
 
-function Dashboard({ token, onLogout }) {
+function Dashboard({ token, onLogout, theme, setTheme }) {
   const [notes, setNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -18,7 +19,6 @@ function Dashboard({ token, onLogout }) {
   const fetchNotes = async () => {
     try {
       const res = await fetch(`${API_URL}/notes`, { headers });
-      // token expired or invalid, kick them back to login
       if (res.status === 401) {
         onLogout();
         return;
@@ -60,7 +60,7 @@ function Dashboard({ token, onLogout }) {
   };
 
   const handleDelete = async (noteId) => {
-    if (!window.confirm("Delete this note?")) return;
+    if (!window.confirm("Delete this note? 🦆")) return;
     const res = await fetch(`${API_URL}/notes/${noteId}`, {
       method: "DELETE",
       headers,
@@ -87,8 +87,12 @@ function Dashboard({ token, onLogout }) {
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1>DuckNotes</h1>
+        <div className="dashboard-title">
+          <span className="duck-logo" title="Quack!">🦆</span>
+          <h1>DuckNotes</h1>
+        </div>
         <div className="header-actions">
+          <ThemeSwitcher theme={theme} setTheme={setTheme} />
           <button className="btn-new" onClick={startCreate}>
             + New Note
           </button>
@@ -109,7 +113,10 @@ function Dashboard({ token, onLogout }) {
       )}
 
       {loading ? (
-        <p className="loading">Loading notes...</p>
+        <div className="loading">
+          <span className="loading-duck">🐤</span>
+          <p>Loading your notes...</p>
+        </div>
       ) : (
         <NoteList notes={notes} onEdit={startEdit} onDelete={handleDelete} />
       )}

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { API_URL } from "../config";
 
-function Login({ onLogin }) {
+function Login({ onLogin, theme, setTheme }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -35,8 +36,9 @@ function Login({ onLogin }) {
   return (
     <div className="auth-container">
       <div className="auth-card">
+        <span className="duck-logo">🦆</span>
         <h1>DuckNotes</h1>
-        <p className="subtitle">Welcome back</p>
+        <p className="subtitle">Welcome back, quacker</p>
         <form onSubmit={handleSubmit}>
           {error && <div className="error">{error}</div>}
           <input
@@ -54,12 +56,15 @@ function Login({ onLogin }) {
             required
           />
           <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Log In"}
+            {loading ? "Waddling in... 🐤" : "Log In 🦆"}
           </button>
         </form>
         <p className="auth-link">
           Don&apos;t have an account? <Link to="/signup">Sign up</Link>
         </p>
+        <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center" }}>
+          <ThemeSwitcher theme={theme} setTheme={setTheme} />
+        </div>
       </div>
     </div>
   );
